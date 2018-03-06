@@ -1,0 +1,40 @@
+import os, sys, time
+
+def print_system():
+	computer_1 = os.name 
+	computer_2 = sys.platform
+	print('{}, {}; Windows is nt/win32, Linux is posix/linux'.format(computer_1, computer_2))
+
+def print_listdir(path):
+	list = os.listdir(path)
+	for file in list:
+		print(file)
+
+def file_name(path):
+	return os.path.split(path)[1]
+
+def file_ext(path):
+	return os.path.splitext(path)[1]
+
+def file_time(path):
+	try:
+		time_now = time.time()
+		time_create = os.path.getctime(path)
+		time_modifi = os.path.getmtime(path)
+		time_visit = os.path.getatime(path)
+		time_1 = round((time_now - time_create)/60/60/24,1)
+		time_2 = round((time_now - time_modifi)/60/60/24,1)
+		time_3 = round((time_now - time_visit)/60/60/24,1)
+		print('该文件于 {} 天前创建、{} 天之前进行过访问、{} 天之前进行过修改。'.format(time_1, time_2, time_3))
+	except:
+		print('文件不存在或有误')
+
+def file_size(path):
+	file_size = round(os.path.getsize(path)/(2**10), 0) #B translate to KB
+	print(file_size)
+
+if __name__ == "__main__":
+	path = sys.argv[1]
+	for file in os.listdir(path):
+		print('file name: {}'.format(file))
+		file_time(path + '\\' + file)
