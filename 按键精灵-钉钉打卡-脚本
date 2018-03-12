@@ -1,0 +1,79 @@
+Function 收下拉栏()
+	Device.UnLock 
+	Delay 2000
+	Swipe 300, 1000, 300, 0, 800
+	Delay 5000
+End Function
+
+Function 进入钉钉打卡()
+	//打开钉钉app
+	Tap 182, 1524
+	Delay 5000
+	Do
+		If CmpColorEx("136|985|EBA94D-101010,400|985|5EB5F7-101010,664|993|FA9632",0.9) = 1 Then
+			//进入考勤打卡
+			Tap 146, 1057
+			Delay 2000
+			Exit Do
+		Else 
+			//退出子项
+			Tap 70, 147
+			Delay 2000
+			Swipe 545, 917, 561, 1317, 1
+			Delay 1000
+			//进入工作
+			Tap 537, 1674
+			Delay 1000
+		End If
+	Loop
+End Function
+
+Function 早上打卡()
+	Tap 146, 1057
+	Delay 3000
+End Function
+
+Function 下午打卡()
+	Tap 553, 1232
+	Delay 3000
+End Function
+
+Function 首页确认()
+	Do
+		If CmpColorEx("124|210|353CDD-101010,191|1470|DF8200-101010",0.9) = 1 Then
+			Exit Do
+		Else 
+			KeyPress "Back"
+			Delay 1000
+		End If
+	Loop
+End Function
+
+Dim h, m, s
+
+Do
+	h = DateTime.Format("%H")
+	m = DateTime.Format("%M")
+	s = DateTime.Format("%S")
+	tracePrint(h&":"&m&":"&s)
+	
+	If h = DateTime.Format("20") And m = DateTime.Format("55") Then 
+	    Call 收下拉栏()
+	    Call 首页确认()
+	    Call 进入钉钉打卡()
+	    Call 早上打卡()
+	    Delay 10000
+	    Device.Lock 
+
+	ElseIf h = DateTime.Format("20") And m = DateTime.Format("56") Then
+	    Call 收下拉栏()
+	    Call 首页确认()
+	    Call 进入钉钉打卡()
+	    Call 下午打卡()
+	    Delay 10000
+	    Device.Lock 
+	End If
+	
+	Delay 2000
+
+Loop
